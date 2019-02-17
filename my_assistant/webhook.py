@@ -5,6 +5,7 @@ from datetime import datetime
 from twilio.rest import Client
 from twilio.twiml.voice_response import VoiceResponse, Say
 from selenium import webdriver
+import time
 
 
 logging.getLogger('flask_assistant').setLevel(logging.DEBUG)
@@ -29,6 +30,7 @@ def time_def(time):
     datetime_object = datetime.strptime(time[11:16], '%H:%M')
     return ask("Awesome! So at "+ datetime_object.strftime('%I:%M%p') + ". What is your number so we can contact you when we find someone to help?")
 
+
 # Start of Twilio Integration
 response = VoiceResponse()
 response.say('Hey shane this shit finally works')
@@ -39,16 +41,18 @@ split_text = split_text.split('<')
 text = '<' + split_text[1] + '<' + split_text[2] + '<' + split_text[3] + '\n<' + split_text[4] + '<' + split_text[5]
 
 #Input message into link
-driver = webdriver.Chrome('/Users/nissani/Desktop/chromedriver')
+driver = webdriver.Chrome('/Users/nissani/Desktop/hacknyu/chromedriver')
 driver.get("https://www.twilio.com/labs/twimlets/echo")
 driver.find_element_by_tag_name("textarea").send_keys(text)
 
+time.sleep(5)
+
 #Extract link we need
-new_url=driver.find_elements_by_partial_link_text('http:')[0].text
+new_url=driver.find_elements_by_partial_link_text('a')[1].text
 
 #text_list = []
 #for links in new_url:
- #   text_list.append(links.text)
+#   text_list.append(links.text)
 final_url=new_url
 print(final_url)
 
