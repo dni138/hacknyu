@@ -38,10 +38,7 @@ def make_call(yes_no):
     if yes_no.lower() == 'yes':
         # Start of Twilio Integration
         response = VoiceResponse()
-        print(things_they_want[0])
-        print(things_they_want[1])
-        print(things_they_want[2])
-        response.say('Hey there! Your friend needs help with '+ things_they_want[0] + '. If you are free on ' + things_they_want[1] + ' at ' + things_they_want[2] + '. Thanks!')
+        response.say('Hey there! Your friend needs help with '+ things_they_want[0] + '. If you are free on ' + things_they_want[1] + ' at ' + things_they_want[2] + '. Press 1. Thanks!')
         raw_text=str(response)
         split_text = raw_text.split('>')
         split_text = split_text[0] + '>\n' + split_text[1] + ">\n" + split_text[2] + '>\n' + split_text[3] + ">\n" + split_text[4] + ">"
@@ -65,11 +62,11 @@ def make_call(yes_no):
         print(final_url)
 
         # Your Account Sid and Auth Token from twilio.com/console
-        account_sid = 'ACbb4c9a919128882a2cc3de7bb35eb628'
-        auth_token = '846ef94690b4ee4cb504f6af6f4c3ded'
+        account_sid = ''
+        auth_token = ''
         client = Client(account_sid, auth_token)
         client.calls.create(url= final_url, to='+12488603141', from_='+12482923276')
-        return
+        return "Call in progress. Thanks for using Neighbor!"
     else:
         return "Thanks! Have a great day!"
 
