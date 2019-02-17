@@ -16,31 +16,32 @@ assist = Assistant(app, project_id='neighbor-1fd69')
 def greet_and_start():
     return ask("What do you need help with?")
 
-what_they_want = ''
+things_they_want = []
 @assist.action('help')
 def helper(action):
-    what_they_want = action
-    return ask("Great! You need help with " + what_they_want + ". What day do you need help with this?")
+    things_they_want.append(action)
+    return ask("Great! You need help with " + things_they_want[0] + ". What day do you need help with this?")
 
-day_they_want = ''
 @assist.action('day')
 def day_def(day):
-    day_they_want = day[:10]
-    return ask("Fantastic! You want help on " + day_they_want + ". What time?")
+    things_they_want.append(day[:10])
+    return ask("Fantastic! You want help on " + things_they_want[1] + ". What time?")
 
-time_they_want = ''
 @assist.action('time')
 def time_def(time):
     datetime_object = datetime.strptime(time[11:16], '%H:%M')
-    time_they_want = datetime_object.strftime('%I:%M%p')
-    return ask("Awesome! So at "+ time_they_want + ". Do you want us to call now?")
+    things_they_want.append(datetime_object.strftime('%I:%M%p'))
+    return ask("Awesome! So at "+ things_they_want[2] + ". Do you want us to call now?")
 
 @assist.action('call')
 def make_call(yes_no):
     if yes_no.lower() == 'yes':
         # Start of Twilio Integration
         response = VoiceResponse()
-        response.say('Hey there! Your friend needs help with '+ what_they_want + '. If you are free on ' + day_they_want + ' at ' + time_they_want + '. Thanks!')
+        print(things_they_want[0])
+        print(things_they_want[1])
+        print(things_they_want[2])
+        response.say('Hey there! Your friend needs help with '+ things_they_want[0] + '. If you are free on ' + things_they_want[1] + ' at ' + things_they_want[2] + '. Thanks!')
         raw_text=str(response)
         split_text = raw_text.split('>')
         split_text = split_text[0] + '>\n' + split_text[1] + ">\n" + split_text[2] + '>\n' + split_text[3] + ">\n" + split_text[4] + ">"
@@ -67,13 +68,8 @@ def make_call(yes_no):
         account_sid = 'ACbb4c9a919128882a2cc3de7bb35eb628'
         auth_token = '846ef94690b4ee4cb504f6af6f4c3ded'
         client = Client(account_sid, auth_token)
-
-        call = client.calls.create(
-                                url= final_url,
-                                to='+12488603141',
-                                from_='+12482923276'
-                            )
-        return "Call in progress. Have a great day!"
+        client.calls.create(url= final_url, to='+12488603141', from_='+12482923276')
+        return
     else:
         return "Thanks! Have a great day!"
 
